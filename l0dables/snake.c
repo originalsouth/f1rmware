@@ -221,12 +221,16 @@ static void handle_input()
 
 static int hitWall()
 {
-  return ( (snake.tail[snake.t_start].x*3 <= MIN_X)
-    || (snake.tail[snake.t_start].x*3 >= MAX_X)
-    || (snake.tail[snake.t_start].y*3 <= MIN_Y)
-    || (snake.tail[snake.t_start].y*3 >= MAX_Y) ) ?
-    1 : 0;
-
+//  return ( (snake.tail[snake.t_start].x*3 <= MIN_X)
+//    || (snake.tail[snake.t_start].x*3 >= MAX_X)
+//    || (snake.tail[snake.t_start].y*3 <= MIN_Y)
+//    || (snake.tail[snake.t_start].y*3 >= MAX_Y) ) ?
+//    1 : 0;
+    if(snake.tail[snake.t_start].x*3<=MIN_X) snake.tail[snake.t_start].x=MAX_X/3;
+    else if(snake.tail[snake.t_start].x*3>=MIN_X) snake.tail[snake.t_start].x=MIN_X/3;
+    if(snake.tail[snake.t_start].y*3<=MIN_Y) snake.tail[snake.t_start].y=MAX_Y/3;
+    else if(snake.tail[snake.t_start].y*3>=MIN_Y) snake.tail[snake.t_start].y=MIN_Y/3;
+    return 1;
 }
 
 static int hitSelf()
