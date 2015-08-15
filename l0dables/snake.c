@@ -79,27 +79,42 @@ void ram(void)
       snake.tail[pos].y = snake.tail[snake.t_start].y;
 
       if(snake.dir == 0)
-	snake.tail[pos].x++;
+      {
+          snake.tail[pos].x++;
+          if(snake.tail[pos].x>=MAX_X) snake.tail[pos].x=MIN_X;
+      }
       else if(snake.dir == 1)
-	snake.tail[pos].y++;
+      {
+          snake.tail[pos].y++;
+          if(snake.tail[pos].x>=MAX_Y) snake.tail[pos].y=MIN_Y;
+      }
       else if(snake.dir == 2)
-	snake.tail[pos].x--;
+      {
+          snake.tail[pos].x--;
+          if(snake.tail[pos].x<=MIN_X) snake.tail[pos].x=MAX_X;
+      }
       else if(snake.dir == 3)
-	snake.tail[pos].y--;
+      {
+          snake.tail[pos].y--;
+          if(snake.tail[pos].y<=MIN_Y) snake.tail[pos].y=MAX_Y;
+      }
 
       snake.t_start = pos;
 
-      if (pos < snake.len) {
-	del = MAX_SNAKE_LEN - (snake.len - pos);
-      }	else
-	del = pos - snake.len;
+      del = pos - snake.len;
+      if (pos < snake.len) del += MAX_SNAKE_LEN;
+
+      //  if (pos < snake.len) {
+      //del = MAX_SNAKE_LEN - (snake.len - pos);
+      //  }	else
+      //del = pos - snake.len;
 
       // remove last, add first line
       draw_block(snake.tail[del].x, snake.tail[del].y, 0xFF);
       draw_block(snake.tail[pos].x, snake.tail[pos].y, 0b00011000);
 
       // check for obstacle hit..
-      if (hitWall() || hitSelf()) {
+      if (hitSelf()) {
 	death_anim();
 	if (showHighscore())
 	  break;
@@ -217,20 +232,6 @@ static void handle_input()
     snake.dir = 2;
   else if (key&BTN_RIGHT && dir_old !=2)
     snake.dir = 0;
-}
-
-static int hitWall()
-{
-//  return ( (snake.tail[snake.t_start].x*3 <= MIN_X)
-//    || (snake.tail[snake.t_start].x*3 >= MAX_X)
-//    || (snake.tail[snake.t_start].y*3 <= MIN_Y)
-//    || (snake.tail[snake.t_start].y*3 >= MAX_Y) ) ?
-//    1 : 0;
-    if(snake.tail[snake.t_start].x*3<=MIN_X) snake.tail[snake.t_start].x=MAX_X/3;
-    else if(snake.tail[snake.t_start].x*3>=MIN_X) snake.tail[snake.t_start].x=MIN_X/3;
-    if(snake.tail[snake.t_start].y*3<=MIN_Y) snake.tail[snake.t_start].y=MAX_Y/3;
-    else if(snake.tail[snake.t_start].y*3>=MIN_Y) snake.tail[snake.t_start].y=MIN_Y/3;
-    return 1;
 }
 
 static int hitSelf()
